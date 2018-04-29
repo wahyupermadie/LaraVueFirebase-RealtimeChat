@@ -1,5 +1,17 @@
 <template>
-    <v-card>
+  <div>
+    <div class="message" v-for="(message,index) in messages" :class="{own: message.userId == userId}">
+        <!-- {{messages[index]}} {{index}} -->
+      <div class="username" v-if="index>0 && messages[index-1].userId != message.userId">{{message.user}}</div>
+      <div class="username" v-if="index == 0">{{message.user}}</div>
+      <div style="margin-top: 5px"></div>
+      <div class="content">
+        <div v-html="message.content"></div>
+      </div>
+    </div>
+  </div>
+</template>
+    <!-- <v-card>
         <v-list two-line>
             <template v-for="(message,index) in messages">
                 <v-list-tile v-bind:key="index">
@@ -17,8 +29,7 @@
                 </v-list-tile>
             </template>
         </v-list>
-    </v-card>
-</template>
+    </v-card> -->
 <script>
 export default {
     name: 'Message',

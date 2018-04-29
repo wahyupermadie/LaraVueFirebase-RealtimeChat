@@ -53168,6 +53168,10 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(98)
+}
 var normalizeComponent = __webpack_require__(2)
 /* script */
 var __vue_script__ = __webpack_require__(57)
@@ -53176,7 +53180,7 @@ var __vue_template__ = __webpack_require__(73)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
-var __vue_styles__ = null
+var __vue_styles__ = injectStyle
 /* scopeId */
 var __vue_scopeId__ = null
 /* moduleIdentifier (server only) */
@@ -53222,6 +53226,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_firebase___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_firebase__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_Message__ = __webpack_require__(70);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_Message___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_Message__);
+//
+//
 //
 //
 //
@@ -76115,6 +76121,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: 'Message',
@@ -76135,71 +76152,35 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c(
-    "v-card",
-    [
-      _c(
-        "v-list",
-        { attrs: { "two-line": "" } },
+    "div",
+    _vm._l(_vm.messages, function(message, index) {
+      return _c(
+        "div",
+        {
+          staticClass: "message",
+          class: { own: message.userId == _vm.userId }
+        },
         [
-          _vm._l(_vm.messages, function(message, index) {
-            return [
-              _c(
-                "v-list-tile",
-                { key: index },
-                [
-                  _c("v-list-tile-avatar", [
-                    _c("img", {
-                      attrs: {
-                        src: "//vuetifyjs.com/static/doc-images/lists/1.jpg"
-                      }
-                    })
-                  ]),
-                  _vm._v(" "),
-                  message.userId === _vm.userId
-                    ? _c(
-                        "v-list-tile-content",
-                        {
-                          staticStyle: { "background-color": "gray !important" }
-                        },
-                        [
-                          _c("v-list-tile-title", {
-                            domProps: { innerHTML: _vm._s(message.user) }
-                          }),
-                          _vm._v(" "),
-                          _c("v-list-tile-sub-title", {
-                            domProps: { innerHTML: _vm._s(message.content) }
-                          })
-                        ],
-                        1
-                      )
-                    : _c(
-                        "v-list-tile-content",
-                        {
-                          staticStyle: {
-                            "background-color": "green !important"
-                          }
-                        },
-                        [
-                          _c("v-list-tile-title", {
-                            domProps: { innerHTML: _vm._s(message.user) }
-                          }),
-                          _vm._v(" "),
-                          _c("v-list-tile-sub-title", {
-                            domProps: { innerHTML: _vm._s(message.content) }
-                          })
-                        ],
-                        1
-                      )
-                ],
-                1
-              )
-            ]
-          })
-        ],
-        2
+          index > 0 && _vm.messages[index - 1].userId != message.userId
+            ? _c("div", { staticClass: "username" }, [
+                _vm._v(_vm._s(message.user))
+              ])
+            : _vm._e(),
+          _vm._v(" "),
+          index == 0
+            ? _c("div", { staticClass: "username" }, [
+                _vm._v(_vm._s(message.user))
+              ])
+            : _vm._e(),
+          _vm._v(" "),
+          _c("div", { staticStyle: { "margin-top": "5px" } }),
+          _vm._v(" "),
+          _c("div", { staticClass: "content" }, [
+            _c("div", { domProps: { innerHTML: _vm._s(message.content) } })
+          ])
+        ]
       )
-    ],
-    1
+    })
   )
 }
 var staticRenderFns = []
@@ -76222,9 +76203,17 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "v-flex",
-    { attrs: { xs12: "", sm6: "", "offset-sm3": "" } },
+    {
+      staticStyle: { position: "relative" },
+      attrs: { xs12: "", sm6: "", "offset-sm3": "" }
+    },
     [
-      _c("message", { attrs: { messages: _vm.messages } }),
+      _c(
+        "div",
+        { staticClass: "chat-container" },
+        [_c("message", { attrs: { messages: _vm.messages } })],
+        1
+      ),
       _vm._v(" "),
       _c(
         "form",
@@ -76244,8 +76233,7 @@ var render = function() {
         ],
         1
       )
-    ],
-    1
+    ]
   )
 }
 var staticRenderFns = []
@@ -98024,6 +98012,47 @@ if (false) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 97 */,
+/* 98 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(99);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(52)("6b54350f", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-5343cd13\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./chatIndex.vue", function() {
+     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-5343cd13\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./chatIndex.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 99 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(20)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.chat-container{\r\n    -webkit-box-sizing: border-box;\r\n            box-sizing: border-box;\r\n    height: calc(100vh - 9.5rem);\r\n    overflow-y: auto;\r\n    padding: 10px;\r\n    background-color: #f2f2f2;\n}\n.message{\r\n    margin-bottom: 3px;\n}\n.message.own{\r\n    text-align: right;\n}\n.message.own .content{\r\n    background-color: lightskyblue;\n}\n.chat-container .username{\r\n    font-size: 18px;\r\n    font-weight: bold;\n}\n.chat-container .content{\r\n    padding: 8px;\r\n    background-color: lightgreen;\r\n    border-radius: 10px;\r\n    display:inline-block;\r\n    -webkit-box-shadow: 0 1px 3px 0 rgba(0,0,0,0.2), 0 1px 1px 0 rgba(0,0,0,0.14), 0 2px 1px -1px rgba(0,0,0,0.12);\r\n            box-shadow: 0 1px 3px 0 rgba(0,0,0,0.2), 0 1px 1px 0 rgba(0,0,0,0.14), 0 2px 1px -1px rgba(0,0,0,0.12);\r\n    max-width: 50%;\r\n    word-wrap: break-word;\n}\n@media (max-width: 480px) {\n.chat-container .content{\r\n      max-width: 60%;\n}\n}\r\n", ""]);
+
+// exports
+
 
 /***/ })
 /******/ ]);

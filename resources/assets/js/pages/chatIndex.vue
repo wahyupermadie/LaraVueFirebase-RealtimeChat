@@ -1,6 +1,8 @@
 <template>
-    <v-flex xs12 sm6 offset-sm3>
-        <message :messages="messages"></message>
+    <v-flex xs12 sm6 offset-sm3 style="position: relative;">
+        <div class="chat-container">
+            <message :messages="messages"></message>
+        </div>
         <form>
             <v-text-field   
                 label="Input Chat"
@@ -98,3 +100,39 @@ export default {
     }
 }
 </script>
+<style>
+.chat-container{
+    box-sizing: border-box;
+    height: calc(100vh - 9.5rem);
+    overflow-y: auto;
+    padding: 10px;
+    background-color: #f2f2f2;
+  }
+  .message{
+    margin-bottom: 3px;
+  }
+  .message.own{
+    text-align: right;
+  }
+  .message.own .content{
+    background-color: lightskyblue;
+  }
+  .chat-container .username{
+    font-size: 18px;
+    font-weight: bold;
+  }
+  .chat-container .content{
+    padding: 8px;
+    background-color: lightgreen;
+    border-radius: 10px;
+    display:inline-block;
+    box-shadow: 0 1px 3px 0 rgba(0,0,0,0.2), 0 1px 1px 0 rgba(0,0,0,0.14), 0 2px 1px -1px rgba(0,0,0,0.12);
+    max-width: 50%;
+    word-wrap: break-word;
+    }
+  @media (max-width: 480px) {
+    .chat-container .content{
+      max-width: 60%;
+    }
+  }
+</style>
