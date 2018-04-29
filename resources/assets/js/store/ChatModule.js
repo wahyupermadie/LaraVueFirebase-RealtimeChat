@@ -24,27 +24,26 @@ const ChatModule = {
         date: payload.date
       }
       console.log(message)
-      firebase.database().ref('messages').child(key).child('messages').push(message)
-        .then(
-          (data) => {
-          }
-        )
-        .catch(
-          (error) => {
-            console.log(error)
-          }
-        )
-    },
-    loadChats ({commit}) {
-      firebase.database().ref('chats').on('value', function (snapshot) {
-        commit('setChats', snapshot.val())
-      })
+      axios.post('http://127.0.0.1:8000/api/messages',message)
+        .then((response) => {
+          console.log(response.data)
+          firebase.database().ref('messages').child(key).child('messages').push(message)
+          .then(
+            (data) => {
+            }
+          )
+          .catch(
+            (error) => {
+              console.log(error)
+            }
+          )
+        },(err) => {
+          console.log(err)
+        })
     },
     createChat ({commit}, payload) {
         console.log(payload)
             axios.post('http://127.0.0.1:8000/api/createChat',payload).then((response) => {
-                // console.log(response.data[0].id)
-                // console.log(response.data)
                 const key = response.data[0].id
                 Router.push('/chat/' + key)
             }, (err) => {

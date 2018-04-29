@@ -6,7 +6,11 @@
                 <v-list-tile-avatar>
                     <img src="//vuetifyjs.com/static/doc-images/lists/1.jpg">
                 </v-list-tile-avatar>
-                <v-list-tile-content>
+                <v-list-tile-content v-if="message.userId === userId " style="background-color: gray !important">
+                    <v-list-tile-title v-html="message.user"></v-list-tile-title>
+                    <v-list-tile-sub-title v-html="message.content"></v-list-tile-sub-title>
+                </v-list-tile-content>
+                <v-list-tile-content v-else style="background-color: green !important">
                     <v-list-tile-title v-html="message.user"></v-list-tile-title>
                     <v-list-tile-sub-title v-html="message.content"></v-list-tile-sub-title>
                 </v-list-tile-content>
@@ -21,5 +25,10 @@ export default {
     props: [
         'messages'
     ],
+    computed:{
+        userId(){
+            return this.$store.getters.getUserId
+        }
+    }
 }
 </script>

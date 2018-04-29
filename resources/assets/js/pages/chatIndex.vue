@@ -10,7 +10,6 @@
             </v-text-field>
             <v-btn @click="sendMessage">submit</v-btn>
         </form>
-        {{chatMessages}}
     </v-flex>
 </template>
 <script>
@@ -93,10 +92,6 @@ export default {
             /*eslint-enable */
             if (imageRegex.test(message.content)) {
             message.image = imageRegex.exec(message.content)[0]
-            }
-            var emojiRegex = /([\u{1f300}-\u{1f5ff}\u{1f900}-\u{1f9ff}\u{1f600}-\u{1f64f}\u{1f680}-\u{1f6ff}\u{2600}-\u{26ff}\u{2700}-\u{27bf}\u{1f1e6}-\u{1f1ff}\u{1f191}-\u{1f251}\u{2934}-\u{1f18e}])/gu
-            if (emojiRegex.test(message.content)) {
-            message.content = message.content.replace(emojiRegex, '<span class="emoji">$1</span>')
             }
             return message
         },
