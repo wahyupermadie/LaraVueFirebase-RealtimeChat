@@ -1,5 +1,8 @@
 <template>
     <v-flex xs12 sm6 offset-sm3 style="position: relative;">
+        <v-toolbar color="cyan" dark>
+            <v-toolbar-title >{{friends.name}}</v-toolbar-title>
+        </v-toolbar>
         <div class="chat-container">
             <message :messages="messages"></message>
         </div>
@@ -11,15 +14,16 @@
             >
             </v-text-field>
             <v-btn @click="sendMessage">submit</v-btn>
+            <v-btn @click="endChat">End Chat</v-btn>
         </form>
     </v-flex>
 </template>
 <script>
 import axios from "axios"
+import {getCache,storedCache} from '../cache'
 import * as firebase from 'firebase'
 import Message from '../components/Message'
 export default {
-    props: ['id'],
     components: {
         Message
     },
@@ -41,8 +45,14 @@ export default {
       }
     },
     computed:{
+        friends(){
+            return getCache(this.$route.params.id)
+        },
         messages () {
             return this.chatMessages
+        },
+        userId(){
+            return this.$store.getters.getUserId
         },
         onChildAdded () {
             var vm = this
@@ -64,6 +74,16 @@ export default {
         },
     },
     methods: {
+        endChat() {
+            const id_chat = this.$route.params.id
+            const flag = this.$store.getters.getUserId
+            const content_data = { 
+                date: new Date().toString(), 
+                chatID: id_chat,
+                flag:flag
+            }
+            this.$store.dispatch('updateChat',content_data)
+        },
         sendMessage () {
                 const user_name = localStorage.getItem('user_name');
                 const id_chat = this.$route.params.id
@@ -74,7 +94,8 @@ export default {
                         userId: user_id,
                         content: this.content, 
                         date: new Date().toString(), 
-                        chatID: id_chat 
+                        chatID: id_chat,
+                        deleted:'none'
                     }
                     this.$store.dispatch('sendMessage',content_data)
                     this.content = ''
@@ -103,7 +124,7 @@ export default {
 <style>
 .chat-container{
     box-sizing: border-box;
-    height: calc(100vh - 9.5rem);
+    height: 400px;
     overflow-y: auto;
     padding: 10px;
     background-color: #f2f2f2;

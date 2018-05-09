@@ -13,16 +13,30 @@ use DB;
 
 class ChatController extends Controller
 {
-    public function fetchMessages()
+    public function fetchinbox()
     {
-        $messages = DB::table('det_messages')
-                    ->join('messages', 'messages.id', '=', 'det_messages.message_id')
-                    ->join('users', 'users.id', '=', 'messages.user_1')
-                    ->join('users AS user1', 'user1.id', '=', 'messages.user_2')
-                    ->select('users.*', 'messages.*', 'det_messages.*')
-                    ->get();
+        $inbox = DB::table('inboxes')
+                ->select('users.name as username','inboxes.*')
+                ->join('users','users.id','=','inboxes.sender_id')
+                ->where('flag','received')
+                ->get();
 
-        return response()->json($messages);
+        return response()->json($inbox);
+    }
+
+    public function updateInbox(Request $request)
+    {
+        $inbox = Inbox::find($request->id);
+        $inbox->flag = 'completed';
+        $inbox->save();
+
+        $outbox = new Outbox();
+        $outbox->message_id = $request->message_id;
+        $outbox->sender_id = $request->sender_id;
+        $outbox->received_id = $request->received_id;
+        $outbox->messages = $request->messages;
+        $outbox->flag = 'completed';
+        $outbox->save();
     }
 
     /**
@@ -51,15 +65,19 @@ class ChatController extends Controller
 
         // return $receiveds;
         $outbox = new Outbox();
+        $outbox->message_id = $request->chatID;
         $outbox->sender_id = $request->userId;
         $outbox->received_id = $receiveds;
         $outbox->messages = $request->content;
+        $outbox->flag = 'completed';
         $outbox->save();
 
         $inbox = new Inbox();
+        $inbox->message_id = $request->chatID;
         $inbox->sender_id = $request->userId;
         $inbox->received_id = $receiveds;
         $inbox->messages = $request->content;
+        $inbox->flag = 'completed';
         $inbox->save();
 
     }
@@ -73,6 +91,8 @@ class ChatController extends Controller
                 ->where('user_2', $request->user1);
             })
         ->get();
+        
+        // return $countChat;
 
         if($countChat->count() < 1){
             $chatRoom = new Message();
@@ -80,18 +100,22 @@ class ChatController extends Controller
             $chatRoom->user_2 = $request->user2;
             $chatRoom->save();
             
-            $idChat = Message::max('id')
-                ->where('user_1',$request->user1)
-                ->where('user_2',$request->user2);
-            return $idChat;
-
-        }else{
             $idChat = DB::table('messages')
                 ->select('id')
-                ->where('user_1','=',$request->user1,'AND','user_2','=',$request->user2)
-                ->orWhere('user_1','=',$request->user2,'AND','user_2','=',$request->user1)
-                ->get();
-            return $idChat;
+                ->where('user_1',$request->user1)
+                ->where('user_2',$request->user2)
+                ->first();
+            return $idChat->id;
+
+        }else{
+            $idChat = Message::select('id')
+            ->where('user_1', $request->user1)
+            ->where('user_2', $request->user2)
+            ->orWhere(function($q) use($request) {
+                $q->where('user_1', $request->user2)
+                ->where('user_2', $request->user1);
+            })->first();
+            return $idChat->id;
             
         }
     }

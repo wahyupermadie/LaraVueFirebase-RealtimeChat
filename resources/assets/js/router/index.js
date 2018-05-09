@@ -5,7 +5,6 @@ import Login from '../components/Login.vue';
 import Register from '../components/Signup.vue';
 import Router from 'vue-router';
 const router = new Router({
-    mode: 'history',
     routes: [
         { 
             path: '/home', 

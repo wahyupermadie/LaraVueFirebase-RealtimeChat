@@ -39,3 +39,6 @@ Route::middleware('jwt.refresh')->get('/token/refresh', 'AuthController@refresh'
 Route::post('createChat','ChatController@createChat');
 Route::post('messages', 'ChatController@sendMessage');
 Route::resource('/user','UserController');
+
+Route::get('/inbox','ChatController@fetchinbox');
+Route::post('/update/inbox','ChatController@updateInbox');

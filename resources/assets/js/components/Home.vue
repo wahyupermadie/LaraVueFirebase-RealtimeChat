@@ -3,7 +3,7 @@
   <v-card>
     <v-list two-line>
       <template v-for="friend in friends">
-        <v-list-tile :key="friend.id" @click="openChat(friend.id)">
+        <v-list-tile :key="friend.id" @click="openChat(friend)">
           <v-list-tile-avatar>
             <img src="//vuetifyjs.com/static/doc-images/lists/1.jpg">
           </v-list-tile-avatar>
@@ -49,10 +49,12 @@ export default {
       this.$store.dispatch('loadFriends')
   },
   methods: {
-    openChat(id){
+    openChat(friend){
+      // console.log(friend)
       const dataChat = {
         user1:this.getUserId,
-        user2:id
+        user2:friend.id,
+        friend:friend
       }
       this.$store.dispatch('createChat',dataChat)
       // this.$router.push('/chat/' + id)
